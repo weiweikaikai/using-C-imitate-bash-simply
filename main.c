@@ -5,31 +5,24 @@
 * Author:WK   
 * Time: 2015 29 4 
 ************************************************************************/ 
-#include "cmd_bash.h"
-
-int main() 
-{ 
-	char cmd[128]={'0'}; //缓冲区
-	while(1) 
-	{ 
-		printf("input command:");
-		scanf("%s", cmd); 
-		if(0==strcmp(cmd,"help")) 
-		{ 
-			help();
-		} 
-		else if(0==strcmp(cmd,"quit") || 0==strcmp(cmd,"q"))
-		{ 
-			 quit();
-			
-		} 
-		else if(0==(strcmp(cmd,"version")))
-		{ 
-			version();
-		} 
-		else
+#include"cmd_bash.h"
+int main()
+{	
+	while(1)
+	{    
+		char cmd[CMD_MAX_LEN];
+		printf("Input a command number>");
+		scanf("%s",cmd);
+		tDataNode* p=find(head,cmd);
+		if(p== NULL)
 		{
-			printf("command not found\n"); 
+			printf("command not found!\n");
+			continue;
+		}
+		printf("%s - %s\n",p->cmd,p->desc);
+		if(p->handler != NULL)//有点多态的意思调用同一个handler效果不同
+		{
+            p->handler();//function point
 		}
 	}
 	return 0;
